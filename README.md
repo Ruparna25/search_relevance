@@ -11,10 +11,25 @@ Few years back Kaggle hosted a competition, CrowdFlower Search Results Relevance
 ### EDA
 1. There are 261 unique 'query' keyword both in training and test set. Extracted the top 50 most frequently used query string and saw how the train is distributed in that top 50 query keyword for both training and test set and below is their distribution map.
 
+<img src='https://github.com/Ruparna25/search_relevance/blob/main/Images/Top50.png'>
+
 2. There are a few missing 'product_description' both in train and test set. 
 Note: We are not imputing the missing value for product description column, as we will be not be using product_description when training our model.
 
+<img src='https://github.com/Ruparna25/search_relevance/blob/main/Images/null_pct.png'>
+
 3. The 'median_relevance' field is a catagorical field which contains 4 values, 1 through 4, below graph shows how many number of products belong to each catagory of this relevance score. Apart from this we have a relevance_variance field which is used for measuring the Variance of the relevance scores.
+
+<br> Median Variance Distribution -
+<br><img src='https://github.com/Ruparna25/search_relevance/blob/main/Images/med_rel.png'>
+
+<br> Relevance Variance
+<br><p float="left">Query - **Wireless Mouse** <br>
+ <img src='https://github.com/Ruparna25/search_relevance/blob/main/Images/rel_var_wmouse.png' width=500 height=200><img src='https://github.com/Ruparna25/search_relevance/blob/main/Images/rel_var_wmouse1.png' width=500 height=200>
+</p>
+<br><p float="left">Query - **Bike LocK** <br>
+ <img src='https://github.com/Ruparna25/search_relevance/blob/main/Images/rel_var_bike.png' width=500 height=200><img src='https://github.com/Ruparna25/search_relevance/blob/main/Images/rel_var_bike1.png' width=500 height=200>
+</p>
 
 ### Feature Engineering 
 As part of feature engineering the following steps were performed - 
@@ -59,5 +74,20 @@ Examples of combined query and product title -
 ('bridal', 'b') 0.19433110228300043
 
 ### Model
+Creating Pipeline - 
+1. After the TFIDF transformation of the data, a data pipeline is created. The first operation performed as a part of the data pipeline is to do dimensionality reduction of the transformed data. As TF-IDF creates a sparse matrix so we need to decompose the transformed data for ease of training. TruncatedSVD class of sklearn.preprocessing is used to reduce the dimension of the training data.
+
+2. The truncated data is then standardized using StandardScaler class of sklearn.preprocesing. This is done for normalizing the data.
+
+3. The third operation of the pipeline is modeling. The transformed and normalized data is fed to a model for training. The model I tried here is SVC - Support Vector Classifier which accepts the preprocessed data as feature and median_relevance as the target variable. 
+
+Model Training -
+<br> Used GridSearchCV for hyperparamenter tuning. The comibination of parameters used for training the model were - Reduced Dimension - 200/400 and 'C' parameter of SVC was set to 10/12 and cross_validation size was set to 2. Based on these figures, there were total of 8 fits of the model. The best model was obtained with the below parameter combination - 
+
+Pipeline(steps=[('svd', TruncatedSVD(n_components=200)),
+                ('std', StandardScaler()), ('svm', SVC(C=10))])
 
 ### Performance
+The metrics used for scoring the model performance is **kappa statistics**. Below is a brief description of what kappa statistics refer to -
+<br>The kappa statistic is frequently used to test interrater reliability. The importance of rater reliability lies in the fact that it represents the extent to which the data collected in the study are correct representations of the variables measured. Measurement of the extent to which data collectors (raters) assign the same score to the same variable is called interrater reliability. While there have been a variety of methods to measure interrater reliability, traditionally it was 
+measured as percent agreement, calculated as the number of agreement scores divided by the total number of scores. 
