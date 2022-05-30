@@ -40,7 +40,7 @@ Examples of combined query and product title -
 <br>'bridal shower decorations Accent Pillow with Heart Design - Red/Black',
 <br>'led christmas lights Set of 10 Battery Operated Multi LED Train Christmas Lights - Clear Wire',
 
-4. TFIDF - TFIDF is used for converting the combined text to numerical value, and the ngram parameter of TF-IDF was set to 1 through 5 so it considers creating numerical reference for combination of words within one quey+product_title_pair. Below is an example of how the TF-IDF for query - **bridal shower decorations**
+3. TFIDF - TFIDF is used for converting the combined text to numerical value, and the ngram parameter of TF-IDF was set to 1 through 5 so it considers creating numerical reference for combination of words within one quey+product_title_pair. Below is an example of how the TF-IDF for query - **bridal shower decorations**
 
  **5-GRAM**
 <br>('bridal shower decorations accent pillow', 'b') 0.261742125188547
